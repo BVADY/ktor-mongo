@@ -1,13 +1,13 @@
 package domain
 
-import domain.interfaces.IUser
+import domain.interfaces.IAttendee
 
-class User(
+class Attendee(
         override val name: String,
         override val email: String,
         override var present: Boolean = false
 
-): IUser {
+): IAttendee {
     override fun checkedIn() {
         this.present = true;
     }

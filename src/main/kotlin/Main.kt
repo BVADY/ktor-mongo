@@ -1,8 +1,6 @@
 import com.google.gson.Gson
-import data.repositories.UserRepository
-import domain.User
+import data.repositories.AttendeeRepository
 import io.ktor.application.*
-import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
@@ -14,15 +12,15 @@ fun main(args: Array<String>) {
 
     val server = embeddedServer(Netty, port = port) {
         routing {
-            route("/users")  {
+            route("/attendees")  {
                 get {
-                    val result = UserRepository.getAllUsers()
+                    val result = AttendeeRepository.getAllAttendees()
                     call.respond(Gson().toJson(result))
                 }
 
                 get("/{email}") {
                     val email = call.parameters["email"]
-                    val result = UserRepository.getUserByEmail(email.toString())
+                    val result = AttendeeRepository.getAttendeeByEmail(email.toString())
                     call.respond(Gson().toJson(result))
                 }
             }

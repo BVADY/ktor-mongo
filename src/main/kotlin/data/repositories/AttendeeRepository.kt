@@ -1,47 +1,42 @@
 package data.repositories
 
 import com.mongodb.MongoClient
-import com.mongodb.client.MongoDatabase
-import data.mongo.MongoDataService
-import domain.User
-import org.bson.BsonDocument
-import org.bson.BsonString
+import domain.Attendee
 import org.bson.Document
 import org.bson.types.ObjectId
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
-import org.litote.kmongo.getCollection
 
-object UserRepository {
+object AttendeeRepository {
 
     private val  database = MongoClient().getDatabase("scanr")
-    private val collection = database.getCollection("users", Document::class.java)
+    private val collection = database.getCollection("attendees", Document::class.java)
 
-    fun getAllUsers(): List<User> {
-        val result = mutableListOf<User>()
+    fun getAllAttendees(): List<Attendee> {
+        val result = mutableListOf<Attendee>()
         collection.find()
                 .forEach {
                     val asMap: Map<String, Any> = mongoDocumentToMap(it)
-                    val user = User(
+                    val attendee = Attendee(
                             name = asMap["name"].toString(),
                             email = asMap["email"].toString(),
                             present = asMap["present"].toString() == "true"
                     )
-                    result.add(user)
+                    result.add(attendee)
                 }
         return result
 
     }
 
-    fun getUserByEmail(email: String) : User {
+    fun getAttendeeByEmail(email: String) : Attendee {
 
         val client = KMongo.createClient()
         val database = client.getDatabase("scanr")
-        val col = database.getCollection("users")
+        val col = database.getCollection("attendees")
 
-        val result =  col.findOne { User::email eq email }
-        return User(
+        val result =  col.findOne { Attendee::email eq email }
+        return Attendee(
                 name = result?.getString("name").toString(),
                 email = result?.getString("email").toString(),
                 present = result?.getString("email").toString() == "true"
