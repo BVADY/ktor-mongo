@@ -4,15 +4,21 @@ import com.mongodb.MongoClient
 import com.mongodb.client.MongoDatabase
 import data.mongo.MongoDataService
 import domain.User
+import org.bson.BsonDocument
+import org.bson.BsonString
 import org.bson.Document
 import org.bson.types.ObjectId
+import org.litote.kmongo.KMongo
+import org.litote.kmongo.eq
+import org.litote.kmongo.findOne
+import org.litote.kmongo.getCollection
 
 object UserRepository {
 
-    val  database: MongoDatabase = MongoClient().getDatabase("scanr")
+    private val  database = MongoClient().getDatabase("scanr")
+    private val collection = database.getCollection("users", Document::class.java)
 
-    fun getAllUsers(collection: String): List<User> {
-        val collection = database.getCollection("users", Document::class.java)
+    fun getAllUsers(): List<User> {
         val result = mutableListOf<User>()
         collection.find()
                 .forEach {
@@ -27,17 +33,21 @@ object UserRepository {
         return result
 
     }
-//    fun getAllUsers(collection: String): ArrayList<Map<String, Any>> {
-//        val collection = database.getCollection("users", Document::class.java)
-//        val result = ArrayList<Map<String, Any>>()
-//        collection.find()
-//                .forEach {
-//                    val asMap: Map<String, Any> = mongoDocumentToMap(it)
-//                    result.add(asMap)
-//                }
-//        return result
-//
-//    }
+
+    fun getUserByEmail(email: String) : User {
+
+        val client = KMongo.createClient()
+        val database = client.getDatabase("scanr")
+        val col = database.getCollection("users")
+
+        val result =  col.findOne { User::email eq email }
+        return User(
+                name = result?.getString("name").toString(),
+                email = result?.getString("email").toString(),
+                present = result?.getString("email").toString() == "true"
+        )
+    }
+
 
     private  fun mongoDocumentToMap(document: Document): Map<String, Any> {
         val asMap: MutableMap<String, Any> = document.toMutableMap()

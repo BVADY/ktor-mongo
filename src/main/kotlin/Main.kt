@@ -14,9 +14,17 @@ fun main(args: Array<String>) {
 
     val server = embeddedServer(Netty, port = port) {
         routing {
-            get("/") {
-                val result = UserRepository.getAllUsers("users")
-                call.respond(Gson().toJson(result))
+            route("/users")  {
+                get {
+                    val result = UserRepository.getAllUsers()
+                    call.respond(Gson().toJson(result))
+                }
+
+                get("/{email}") {
+                    val email = call.parameters["email"]
+                    val result = UserRepository.getUserByEmail(email.toString())
+                    call.respond(Gson().toJson(result))
+                }
             }
         }
     }
