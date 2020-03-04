@@ -23,6 +23,12 @@ fun main(args: Array<String>) {
                     val result = AttendeeRepository.getAttendeeByEmail(email.toString())
                     call.respond(Gson().toJson(result))
                 }
+
+                post("/{email}/check-in"){
+                    val email = call.parameters["email"]
+                    val result = AttendeeRepository.checkInAttendeeByEmail(email.toString())
+                    call.respond(Gson().toJson(result))
+                }
             }
         }
     }

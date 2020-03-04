@@ -7,6 +7,7 @@ import org.bson.types.ObjectId
 import org.litote.kmongo.KMongo
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
+import org.litote.kmongo.updateOne
 
 object AttendeeRepository {
 
@@ -41,6 +42,24 @@ object AttendeeRepository {
                 email = result?.getString("email").toString(),
                 present = result?.getString("email").toString() == "true"
         )
+    }
+
+    fun checkInAttendeeByEmail(email: String) : Attendee {
+        val client = KMongo.createClient()
+        val database = client.getDatabase("scanr")
+        val col = database.getCollection("attendees")
+
+        val result =  col.findOne { Attendee::email eq email }
+        val attendee = Attendee(
+                name = result?.getString("name").toString(),
+                email = result?.getString("email").toString(),
+                present = result?.getString("email").toString() == "true"
+        )
+
+        attendee.checkIn()
+        col.updateOne(Attendee::email eq email, attendee.checkIn())
+
+        return attendee;
     }
 
 

@@ -8,7 +8,7 @@ class Attendee(
         override var present: Boolean = false
 
 ): IAttendee {
-    override fun checkedIn() {
+    override fun checkIn() {
         this.present = true;
     }
 }

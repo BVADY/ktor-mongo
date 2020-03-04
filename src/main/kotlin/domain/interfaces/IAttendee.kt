@@ -5,5 +5,5 @@ interface IAttendee {
     val email: String
     var present: Boolean
 
-    fun checkedIn()
+    fun checkIn()
 }
