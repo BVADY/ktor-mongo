@@ -1,8 +1,12 @@
 package data.mongo
 
-import com.mongodb.MongoClient
+import com.mongodb.client.MongoCollection
+import org.litote.kmongo.KMongo
+import org.litote.kmongo.getCollection
 
-
-class MongoDataService(mongoClient: MongoClient, database: String) {
-    private val database = mongoClient.getDatabase(database)
+open class MongoDataService(dbName: String) {
+    private val database = KMongo.createClient().getDatabase(dbName)
+    internal inline fun <reified T: Any> getCollection(): MongoCollection<T> {
+        return database.getCollection()
+    }
 }

@@ -7,8 +7,4 @@ class Attendee(
         override val email: String,
         override var checkedIn: Boolean = false
 
-): IAttendee {
-    override fun checkIn() {
-        this.checkedIn = true;
-    }
-}
+): IAttendee {}
