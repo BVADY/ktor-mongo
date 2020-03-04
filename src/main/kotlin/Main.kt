@@ -1,5 +1,8 @@
 import com.google.gson.Gson
 import io.ktor.application.*
+import io.ktor.features.CORS
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -14,6 +17,13 @@ fun main() {
     val attendeeService = AttendeeService()
 
     val server = embeddedServer(Netty, port = port) {
+        install(CORS){
+            method(HttpMethod.Options)
+            header(HttpHeaders.XForwardedProto)
+            anyHost()
+            allowCredentials = true
+            allowNonSimpleContentTypes = true
+        }
         routing {
             route("/attendees") {
                 get {
@@ -23,6 +33,7 @@ fun main() {
                         return@get
                     }
 
+                    println("test")
                     call.respond(Gson().toJson(result))
                 }
 
