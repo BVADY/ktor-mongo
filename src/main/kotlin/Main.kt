@@ -1,3 +1,6 @@
+import com.google.gson.Gson
+import data.repositories.UserRepository
+import domain.User
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
@@ -12,7 +15,8 @@ fun main(args: Array<String>) {
     val server = embeddedServer(Netty, port = port) {
         routing {
             get("/") {
-                call.respondText("Hello World!", ContentType.Text.Plain)
+                val result = UserRepository.getAllUsers("users")
+                call.respond(Gson().toJson(result))
             }
         }
     }
