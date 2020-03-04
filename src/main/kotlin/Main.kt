@@ -18,27 +18,42 @@ fun main() {
             route("/attendees") {
                 get {
                     val result = attendeeService.getAllAttendees()
-                    if (result.isNullOrEmpty()) call.respond(HttpStatusCode.NoContent)
+                    if (result.isNullOrEmpty()) {
+                        call.respond(HttpStatusCode.NoContent)
+                        return@get
+                    }
 
                     call.respond(Gson().toJson(result))
                 }
 
                 get("/{email}") {
                     val email = call.parameters["email"]
-                    if (email.isNullOrBlank()) call.respond(HttpStatusCode.BadRequest)
+                    if (email.isNullOrBlank()){
+                        call.respond(HttpStatusCode.BadRequest)
+                        return@get
+                    }
 
-                    val result = email?.let { attendeeService.getAttendeeByEmail(it) }
-                    if (result == null) call.respond(HttpStatusCode.NotFound)
+                    val result = attendeeService.getAttendeeByEmail(email)
+                    if (result == null) {
+                        call.respond(HttpStatusCode.NotFound)
+                        return@get
+                    }
 
                     call.respond(Gson().toJson(result))
                 }
 
                 post("/{email}/check-in") {
                     val email = call.parameters["email"]
-                    if (email.isNullOrBlank()) call.respond(HttpStatusCode.BadRequest)
+                    if (email.isNullOrBlank()){
+                        call.respond(HttpStatusCode.BadRequest)
+                        return@post
+                    }
 
-                    val result = email?.let { attendeeService.checkInAttendeeByEmail(it) }
-                    if (result == null) call.respond(HttpStatusCode.NotFound)
+                    val result = attendeeService.checkInAttendeeByEmail(email)
+                    if (result == null){
+                        call.respond(HttpStatusCode.NotFound)
+                        return@post
+                    }
 
                     call.respond(Gson().toJson(result))
                 }
