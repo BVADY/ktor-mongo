@@ -3,7 +3,7 @@ package domain.interfaces
 interface IAttendee {
     val name: String
     val email: String
-    var present: Boolean
+    var checkedIn: Boolean
 
     fun checkIn()
 }

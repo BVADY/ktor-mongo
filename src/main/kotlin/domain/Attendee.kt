@@ -5,10 +5,10 @@ import domain.interfaces.IAttendee
 class Attendee(
         override val name: String,
         override val email: String,
-        override var present: Boolean = false
+        override var checkedIn: Boolean = false
 
 ): IAttendee {
     override fun checkIn() {
-        this.present = true;
+        this.checkedIn = true;
     }
 }

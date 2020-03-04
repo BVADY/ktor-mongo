@@ -22,7 +22,7 @@ object AttendeeRepository {
                     val attendee = Attendee(
                             name = asMap["name"].toString(),
                             email = asMap["email"].toString(),
-                            present = asMap["present"].toString() == "true"
+                            checkedIn = asMap["present"].toString() == "true"
                     )
                     result.add(attendee)
                 }
@@ -40,7 +40,7 @@ object AttendeeRepository {
         return Attendee(
                 name = result?.getString("name").toString(),
                 email = result?.getString("email").toString(),
-                present = result?.getString("email").toString() == "true"
+                checkedIn = result?.getString("email").toString() == "true"
         )
     }
 
@@ -53,7 +53,7 @@ object AttendeeRepository {
         val attendee = Attendee(
                 name = result?.getString("name").toString(),
                 email = result?.getString("email").toString(),
-                present = result?.getString("email").toString() == "true"
+                checkedIn = result?.getString("email").toString() == "true"
         )
 
         attendee.checkIn()
