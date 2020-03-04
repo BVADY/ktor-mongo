@@ -20,7 +20,7 @@ fun main() {
                     val result = attendeeService.getAllAttendees()
                     if (result.isNullOrEmpty()) call.respond(HttpStatusCode.NoContent)
 
-                    call.respond(HttpStatusCode.OK, Gson().toJson(result))
+                    call.respond(Gson().toJson(result))
                 }
 
                 get("/{email}") {
